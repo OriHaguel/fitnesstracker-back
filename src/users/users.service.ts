@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserCrudService } from './userCrud.service';
+import { error } from 'console';
 
 @Injectable()
 export class UsersService {
@@ -9,6 +10,12 @@ export class UsersService {
 
   signup(createUserDto: CreateUserDto) {
     return this.userCrudService.add(createUserDto);
+  }
+  async login(createUserDto: CreateUserDto) {
+    const user = await this.userCrudService.getByUsername(createUserDto.gmail);
+    if (!user) throw new Error('can\'t log in')
+    delete user.password
+    return user
   }
 
   findAll() {
@@ -20,8 +27,11 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  // update(id: number, updateUserDto: UpdateUserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
+  async update(id: number, updateUserDto: UpdateUserDto) {
+
   }
 
   remove(id: number) {

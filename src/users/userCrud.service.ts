@@ -1,24 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { ObjectId } from 'mongodb';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { ObjectId } from 'mongodb'; // To handle ObjectId conversion if needed
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { DbService } from './db.service'; // Ensure you import DbService
+import { User } from './schemas/user.schema'; // Make sure User interface or class is imported
 
 @Injectable()
 export class UserCrudService {
-    constructor(private dbService: DbService) { } // Inject DbService
+    constructor(
+        @InjectModel('User') private readonly userModel: Model<User>, // Inject the User model
+    ) { }
 
+    // Add a new user
     async add(user: CreateUserDto) {
         try {
-            const userToAdd = {
+            const userToAdd = new this.userModel({
                 username: user.username,
                 password: user.password,
                 gmail: user.gmail,
-                imgUrl: user.imgUrl,
                 weight: user.weight,
-                workouts: user.workouts
-            };
-            const collection = await this.dbService.getCollection('user'); // Use this.dbService
-            await collection.insertOne(userToAdd);
+                workouts: user.workouts,
+            });
+            await userToAdd.save(); // Save the user document using Mongoose
             return userToAdd;
         } catch (err) {
             console.log("🚀 ~ add ~ err:", err);
@@ -26,14 +29,11 @@ export class UserCrudService {
         }
     }
 
+    // Get user by ID
     async getById(userId: string) {
         try {
-            const criteria = { _id: ObjectId.createFromHexString(userId) };
-            const collection = await this.dbService.getCollection('user');
-            const user = await collection.findOne(criteria);
-            if (user) {
-                delete user.password; // Ensure the password is not returned
-            }
+            // Find the user by ID and exclude the password field
+            const user = await this.userModel.findById(userId).select('-password').exec();
             return user;
         } catch (err) {
             console.log("🚀 ~ getById ~ err:", err);
@@ -41,10 +41,10 @@ export class UserCrudService {
         }
     }
 
-    async getByUsername(username: string) {
+    // Get user by Gmail
+    async getByUsername(gmail: string) {
         try {
-            const collection = await this.dbService.getCollection('user');
-            const user = await collection.findOne({ username });
+            const user = await this.userModel.findOne({ gmail }).exec();
             return user;
         } catch (err) {
             console.log("🚀 ~ getByUsername ~ err:", err);
@@ -52,21 +52,24 @@ export class UserCrudService {
         }
     }
 
+    // Update user information
     async update(user: CreateUserDto) {
         try {
-            const userToSave = {
-                _id: ObjectId.createFromHexString(user._id),
-                username: user.username,
-            };
-            const collection = await this.dbService.getCollection('user');
-            await collection.updateOne({ _id: userToSave._id }, { $set: userToSave });
-            return userToSave;
+            const updatedUser = await this.userModel.findByIdAndUpdate(
+                user._id, // _id is used to find the user
+                {
+                    username: user.username,
+                    password: user.password, // You can choose to exclude this field in some cases for security
+                    gmail: user.gmail,
+                    weight: user.weight,
+                    workouts: user.workouts,
+                },
+                { new: true } // Return the updated user document
+            ).exec();
+            return updatedUser;
         } catch (err) {
             console.log("🚀 ~ update ~ err:", err);
             throw err;
         }
     }
 }
-
-
-
