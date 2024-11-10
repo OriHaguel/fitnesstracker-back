@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserCrudService } from './userCrud.service';
 import { error } from 'console';
+import { UpdateExerciseDto } from './dto/update-exercise.dto';
 
 @Injectable()
 export class UsersService {
@@ -30,8 +31,8 @@ export class UsersService {
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
   // }
-  async update(id: number, updateUserDto: UpdateUserDto) {
-
+  async update(userId: string, workoutId: string, updateExerciseDto: UpdateExerciseDto) {
+    this.userCrudService.updateExerciseByName(userId, workoutId, updateExerciseDto)
   }
 
   remove(id: number) {
