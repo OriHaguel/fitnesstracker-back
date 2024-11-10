@@ -32,7 +32,7 @@ export class UsersService {
   //   return `This action updates a #${id} user`;
   // }
   async update(userId: string, workoutId: string, updateExerciseDto: UpdateExerciseDto) {
-    this.userCrudService.updateExerciseByName(userId, workoutId, updateExerciseDto)
+    return this.userCrudService.updateExerciseByName(userId, workoutId, updateExerciseDto)
   }
 
   remove(id: number) {
