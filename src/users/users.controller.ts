@@ -38,6 +38,15 @@ export class UsersController {
     return this.usersService.update(userId, workoutId, updateExerciseDto);
   }
 
+  @Post(':userId/workouts/:workoutId/exercise')
+  add(
+    @Param('userId') userId: string,
+    @Param('workoutId') workoutId: string,
+    @Body() updateExerciseDto: UpdateExerciseDto,
+  ) {
+    return this.usersService.post(userId, workoutId, updateExerciseDto);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

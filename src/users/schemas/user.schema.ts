@@ -14,9 +14,9 @@ export interface User extends Document {
         name: string;
         type: string;
         exercise: {
-            sets: number;
-            weight: number;
-            reps: number;
+            sets?: number;
+            weight?: number;
+            reps?: number;
             name: string;
         }[];
     }[];

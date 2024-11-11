@@ -34,6 +34,9 @@ export class UsersService {
   async update(userId: string, workoutId: string, updateExerciseDto: UpdateExerciseDto) {
     return this.userCrudService.updateExerciseByName(userId, workoutId, updateExerciseDto)
   }
+  async post(userId: string, workoutId: string, updateExerciseDto: UpdateExerciseDto) {
+    return this.userCrudService.addExercise(userId, workoutId, updateExerciseDto)
+  }
 
   remove(id: number) {
     return `This action removes a #${id} user`;

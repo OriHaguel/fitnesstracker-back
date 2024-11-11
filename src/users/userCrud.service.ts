@@ -73,6 +73,26 @@ export class UserCrudService {
     }
 
 
+    async addExercise(userId: string, workoutId: string, updateExerciseDto: UpdateExerciseDto): Promise<User> {
+        // Find the user
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        // Find the workout
+        const workout = user.workouts.find(w => w._id === workoutId);
+        if (!workout) {
+            throw new NotFoundException('Workout not found');
+        }
+
+        // Add the new exercise to the workout's exercises array
+        workout.exercise.push(updateExerciseDto);
+
+        // Save the updated user document
+        await user.save();
+        return user;
+    }
 
 
     async getById(userId: string) {
@@ -85,8 +105,6 @@ export class UserCrudService {
             throw err;
         }
     }
-
-
 
     // Get user by Gmail
     async getByUsername(gmail: string) {
