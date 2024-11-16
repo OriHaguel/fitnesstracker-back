@@ -1,3 +1,4 @@
+import { Types } from "mongoose"
 
 export class CreateUserDto {
     _id: string
@@ -9,7 +10,7 @@ export class CreateUserDto {
         date: Date
     }[]
     workouts: {
-        _id: string
+        _id?: Types.ObjectId;
         name: string
         type: string
         exercise: {

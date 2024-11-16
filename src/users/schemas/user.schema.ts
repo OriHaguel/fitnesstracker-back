@@ -1,5 +1,5 @@
 // src/users/schemas/user.schema.ts
-import { Schema, Document } from 'mongoose';
+import { Schema, Document, Types } from 'mongoose';
 
 export interface User extends Document {
     username: string;
@@ -10,7 +10,7 @@ export interface User extends Document {
         date: Date;
     }[];
     workouts: {
-        _id: string;
+        _id?: Types.ObjectId;
         name: string;
         type: string;
         exercise: {
@@ -34,7 +34,7 @@ export const UserSchema = new Schema({
     ],
     workouts: [
         {
-            _id: { type: String, required: true },
+            _id: { type: Schema.Types.ObjectId, required: false },
             name: { type: String, required: true },
             type: { type: String, required: true },
             exercise: [

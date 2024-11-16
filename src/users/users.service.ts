@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserCrudService } from './userCrud.service';
 import { error } from 'console';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { NewWorkoutDto } from './dto/newworkout.dto';
 
 @Injectable()
 export class UsersService {
@@ -40,5 +41,9 @@ export class UsersService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  addWorkout(userId: string, workoutData: NewWorkoutDto) {
+    return this.userCrudService.createWorkout(userId, workoutData)
   }
 }

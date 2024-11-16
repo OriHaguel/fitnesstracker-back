@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { ObjectId } from 'mongodb'; // To handle ObjectId conversion if needed
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from './schemas/user.schema'; // Make sure User interface or class is imported
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
+import { NewWorkoutDto } from './dto/newworkout.dto';
 
 @Injectable()
 export class UserCrudService {
@@ -53,7 +54,7 @@ export class UserCrudService {
         }
 
         // Find the workout
-        const workout = user.workouts.find(w => w._id === workoutId);
+        const workout = user.workouts.find(w => w._id.toString() === workoutId);
         if (!workout) {
             throw new NotFoundException('Workout not found');
         }
@@ -81,7 +82,7 @@ export class UserCrudService {
         }
 
         // Find the workout
-        const workout = user.workouts.find(w => w._id === workoutId);
+        const workout = user.workouts.find(w => w._id.toString() === workoutId);
         if (!workout) {
             throw new NotFoundException('Workout not found');
         }
@@ -94,6 +95,24 @@ export class UserCrudService {
         return user;
     }
 
+    async createWorkout(userId: string, workoutData: NewWorkoutDto): Promise<User> {
+        // Find the user by ID
+        const user = await this.userModel.findById(userId);
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        // Add the new workout to the user's workouts array
+        user.workouts.push({
+            _id: new mongoose.Types.ObjectId(),
+            ...workoutData,
+        });
+
+        // Save the updated user document
+        await user.save();
+        return user;
+    }
 
     async getById(userId: string) {
         try {
