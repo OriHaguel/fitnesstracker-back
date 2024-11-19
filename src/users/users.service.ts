@@ -39,8 +39,8 @@ export class UsersService {
     return this.userCrudService.addExercise(userId, workoutId, updateExerciseDto)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(userId: string, workoutId: string) {
+    return this.userCrudService.deleteWorkout(userId, workoutId)
   }
 
   addWorkout(userId: string, workoutData: NewWorkoutDto) {

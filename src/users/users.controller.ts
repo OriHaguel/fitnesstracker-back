@@ -54,8 +54,11 @@ export class UsersController {
   ) {
     return this.usersService.addWorkout(userId, workoutData);
   }
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Delete(':userId/workouts/:workoutId')
+  remove(
+    @Param('userId') userId: string,
+    @Param('workoutId') workoutId: string,
+  ) {
+    return this.usersService.remove(userId, workoutId);
   }
 }

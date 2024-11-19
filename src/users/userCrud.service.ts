@@ -114,6 +114,25 @@ export class UserCrudService {
         return user;
     }
 
+    async deleteWorkout(userId: string, workoutId: string): Promise<User> {
+        const result = await this.userModel.updateOne(
+            { _id: userId },
+            { $pull: { workouts: { _id: workoutId } } },
+        );
+
+        if (result.modifiedCount === 0) {
+            throw new NotFoundException('User or workout not found');
+        }
+
+        const updatedUser = await this.userModel.findById(userId);
+        if (!updatedUser) {
+            throw new NotFoundException('User not found after update');
+        }
+
+        return updatedUser;
+    }
+
+
     async getById(userId: string) {
         try {
             // Find the user by ID and exclude the password field
