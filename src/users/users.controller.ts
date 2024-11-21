@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { NewWorkoutDto } from './dto/newworkout.dto';
+import { UpdateWorkoutDto } from './dto/updateworkout.dto';
 
 @Controller('users')
 export class UsersController {
@@ -37,6 +38,14 @@ export class UsersController {
     @Body() updateExerciseDto: UpdateExerciseDto,
   ) {
     return this.usersService.update(userId, workoutId, updateExerciseDto);
+  }
+  @Put(':userId/workouts/:workoutId/')
+  workoutToUpdate(
+    @Param('userId') userId: string,
+    @Param('workoutId') workoutId: string,
+    @Body() updateWorkoutDto: UpdateWorkoutDto,
+  ) {
+    return this.usersService.updateWorkout(userId, workoutId, updateWorkoutDto);
   }
 
   @Post(':userId/workouts/:workoutId/exercise')

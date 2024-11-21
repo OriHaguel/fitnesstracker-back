@@ -13,6 +13,7 @@ export class CreateUserDto {
         _id?: Types.ObjectId;
         name: string
         type: string
+        date?: Date
         exercise: {
             sets: number
             weight: number

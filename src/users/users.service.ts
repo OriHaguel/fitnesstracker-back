@@ -5,6 +5,7 @@ import { UserCrudService } from './userCrud.service';
 import { error } from 'console';
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { NewWorkoutDto } from './dto/newworkout.dto';
+import { UpdateWorkoutDto } from './dto/updateworkout.dto';
 
 @Injectable()
 export class UsersService {
@@ -34,6 +35,9 @@ export class UsersService {
   // }
   async update(userId: string, workoutId: string, updateExerciseDto: UpdateExerciseDto) {
     return this.userCrudService.updateExerciseByName(userId, workoutId, updateExerciseDto)
+  }
+  async updateWorkout(userId: string, workoutId: string, updateData: UpdateWorkoutDto) {
+    return this.userCrudService.updateWorkout(userId, workoutId, updateData)
   }
   async post(userId: string, workoutId: string, updateExerciseDto: UpdateExerciseDto) {
     return this.userCrudService.addExercise(userId, workoutId, updateExerciseDto)

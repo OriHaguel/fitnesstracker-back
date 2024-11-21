@@ -6,6 +6,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from './schemas/user.schema'; // Make sure User interface or class is imported
 import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { NewWorkoutDto } from './dto/newworkout.dto';
+import { UpdateWorkoutDto } from './dto/updateworkout.dto';
 
 @Injectable()
 export class UserCrudService {
@@ -95,6 +96,34 @@ export class UserCrudService {
         return user;
     }
 
+    async deleteExercise(userId: string, workoutId: string, exerciseName: string): Promise<User> {
+        // Find the user
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        // Find the workout
+        const workout = user.workouts.find(w => w._id.toString() === workoutId);
+        if (!workout) {
+            throw new NotFoundException('Workout not found');
+        }
+
+        // Find the exercise index to remove
+        const exerciseIndex = workout.exercise.findIndex(e => e.name === exerciseName);
+        if (exerciseIndex === -1) {
+            throw new NotFoundException('Exercise not found');
+        }
+
+        // Remove the exercise from the workout's exercises array
+        workout.exercise.splice(exerciseIndex, 1);
+
+        // Save the updated user document
+        await user.save();
+        return user;
+    }
+
+
     async createWorkout(userId: string, workoutData: NewWorkoutDto): Promise<User> {
         // Find the user by ID
         const user = await this.userModel.findById(userId);
@@ -131,6 +160,31 @@ export class UserCrudService {
 
         return updatedUser;
     }
+
+    async updateWorkout(
+        userId: string,
+        workoutId: string,
+        updateData: UpdateWorkoutDto,
+    ): Promise<User> {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+        const workout = user.workouts.find(workout => workout._id?.toString() === workoutId);
+        if (!workout) {
+            throw new NotFoundException('Workout not found');
+        }
+
+        // Apply updates to the workout
+        Object.assign(workout, updateData);
+
+        await user.save();
+        return user;
+    }
+
+
+
+
 
 
     async getById(userId: string) {
