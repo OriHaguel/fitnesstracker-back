@@ -70,4 +70,14 @@ export class UsersController {
   ) {
     return this.usersService.remove(userId, workoutId);
   }
+  @Delete(':userId/workouts/:workoutId/exercise')
+  removeExercise(
+    @Param('userId') userId: string,
+    @Param('workoutId') workoutId: string,
+    @Body() exerciseName: { name: string },
+
+  ) {
+    return this.usersService.removeExercise(userId, workoutId, exerciseName);
+  }
 }
+

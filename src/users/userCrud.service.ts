@@ -96,7 +96,7 @@ export class UserCrudService {
         return user;
     }
 
-    async deleteExercise(userId: string, workoutId: string, exerciseName: string): Promise<User> {
+    async deleteExercise(userId: string, workoutId: string, exerciseName: { name: string }): Promise<User> {
         // Find the user
         const user = await this.userModel.findById(userId);
         if (!user) {
@@ -110,7 +110,7 @@ export class UserCrudService {
         }
 
         // Find the exercise index to remove
-        const exerciseIndex = workout.exercise.findIndex(e => e.name === exerciseName);
+        const exerciseIndex = workout.exercise.findIndex(e => e.name === exerciseName.name);
         if (exerciseIndex === -1) {
             throw new NotFoundException('Exercise not found');
         }
