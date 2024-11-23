@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ProgressModule } from './progress/progress.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       inject: [ConfigService], // Inject ConfigService to use in the factory function
     }),
     UsersModule,
+    ProgressModule,
   ],
   controllers: [AppController],
   providers: [AppService],
