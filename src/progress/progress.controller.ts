@@ -1,8 +1,8 @@
-import { Controller, Param, Body, Put, Post } from '@nestjs/common';
+import { Controller, Param, Body, Put, Post, Get } from '@nestjs/common';
 import { ProgressService } from './progress.service';
 import { UpdateProgressDto } from './dto/update-progress.dto';
 import { ExerciseProgress } from './schemas/progress.schema';
-import { CreateProgressDto } from './dto/create-progress.dto';
+import { CreateProgressDto, SetsAndWeights } from './dto/create-progress.dto';
 
 @Controller('progress')
 export class ProgressController {
@@ -15,10 +15,16 @@ export class ProgressController {
   ): Promise<ExerciseProgress> {
     return this.progressService.updateProgress(id, updateProgressDto);
   }
-  @Post('/new')
+  @Post('new')
   async createProgress(
     @Body() CreateProgressDto: CreateProgressDto,
   ): Promise<ExerciseProgress> {
     return this.progressService.createProgress(CreateProgressDto);
+  }
+  @Get(':exerciseId')
+  async getLastSet(
+    @Param('exerciseId') exerciseId: string,
+  ): Promise<SetsAndWeights | null> {
+    return this.progressService.getLastSet(exerciseId);
   }
 }
