@@ -62,20 +62,22 @@ export class ProgressService {
     return lastSet ? lastSet : null;
   }
 
-  async getLastSet(exerciseId: string): Promise<SetsAndWeights | null> {
-    // Fetch the exercise progress document with sets
+  async getLastSetByName(exerciseName: string): Promise<{ name: string; lastSet: SetsAndWeights } | null> {
+    // Fetch the exercise progress document with name and sets
     const exerciseProgress = await this.exerciseProgressModel
-      .findOne({ _id: exerciseId })   // Query by exerciseId
-      .select('sets')                 // Only select the 'sets' field
-      .sort({ 'sets._id': 1 });        // Sort sets by their _id field
+      .findOne({ name: exerciseName }) // Query by exerciseName
+      .select('name sets')             // Select both 'name' and 'sets' fields
+      .sort({ 'sets._id': 1 });        // Sort sets by their _id field (not needed if you trust order in DB)
 
     // Check if exerciseProgress exists and contains sets
     if (!exerciseProgress || !exerciseProgress.sets || exerciseProgress.sets.length === 0) {
       return null;
     }
 
-    // Return the last set from the sets array
-    return exerciseProgress.sets[exerciseProgress.sets.length - 1];
+    // Return the name and the last set
+    return {
+      name: exerciseProgress.name,
+      lastSet: exerciseProgress.sets[exerciseProgress.sets.length - 1],
+    };
   }
-
-}
+}   

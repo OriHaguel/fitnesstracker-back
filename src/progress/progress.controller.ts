@@ -24,7 +24,7 @@ export class ProgressController {
   @Get(':exerciseId')
   async getLastSet(
     @Param('exerciseId') exerciseId: string,
-  ): Promise<SetsAndWeights | null> {
-    return this.progressService.getLastSet(exerciseId);
+  ): Promise<{ name: string; lastSet: SetsAndWeights } | null> {
+    return this.progressService.getLastSetByName(exerciseId);
   }
 }
