@@ -8,12 +8,13 @@ import { CreateProgressDto, SetsAndWeights } from './dto/create-progress.dto';
 export class ProgressController {
   constructor(private readonly progressService: ProgressService) { }
 
-  @Put(':id')
+  @Put()
   async updateProgress(
-    @Param('id') id: string,
+    // @Param('id') id: string,
+    // @Param('name') name: string,
     @Body() updateProgressDto: UpdateProgressDto,
   ): Promise<ExerciseProgress> {
-    return this.progressService.updateProgress(id, updateProgressDto);
+    return this.progressService.updateProgress(updateProgressDto);
   }
   @Post('new')
   async createProgress(
