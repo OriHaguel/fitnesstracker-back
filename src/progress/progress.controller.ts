@@ -10,8 +10,6 @@ export class ProgressController {
 
   @Put()
   async updateProgress(
-    // @Param('id') id: string,
-    // @Param('name') name: string,
     @Body() updateProgressDto: UpdateProgressDto,
   ): Promise<ExerciseProgress> {
     return this.progressService.updateProgress(updateProgressDto);

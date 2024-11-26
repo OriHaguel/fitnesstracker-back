@@ -6,6 +6,10 @@ export class CreateProgressDto {
     @IsNotEmpty()
     name: string;
 
+    @IsString()
+    @IsNotEmpty()
+    ownerId: string;
+
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => SetsAndWeights)

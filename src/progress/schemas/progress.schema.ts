@@ -20,6 +20,9 @@ export class ExerciseProgress {
     @Prop({ required: true })
     name: string;
 
+    @Prop({ required: true })
+    ownerId: string;
+
     @Prop({ type: [SetsAndWeightsSchema], required: true })
     sets: SetsAndWeights[];
 }
