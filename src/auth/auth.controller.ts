@@ -1,5 +1,5 @@
-import { Controller, Post, Body, Res, UnauthorizedException, UseGuards, Get } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Post, Body, Res, UnauthorizedException, UseGuards, Get, Req } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth-guard';
@@ -14,10 +14,12 @@ export class AuthController {
   async login(@Body() loginDto: { gmail: string; password: string }, @Res({ passthrough: true }) response: Response) {
     const user = await this.authService.validateUser(loginDto.gmail, loginDto.password);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new Error('Invalid credentials');
     }
     return this.authService.login(user, response);
   }
+
+
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
@@ -34,5 +36,12 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   getProfile() {
     return { message: 'Protected route' };
+  }
+
+
+  @Get('user')
+  async getLoggedInUser(@Req() request: Request) {
+    const result = await this.authService.getLoggedInUser(request);
+    return result;
   }
 }

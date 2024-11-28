@@ -1,12 +1,15 @@
-import { Controller, Param, Body, Put, Post, Get } from '@nestjs/common';
+import { Controller, Param, Body, Put, Post, Get, Req } from '@nestjs/common';
 import { ProgressService } from './progress.service';
 import { UpdateProgressDto } from './dto/update-progress.dto';
 import { ExerciseProgress } from './schemas/progress.schema';
 import { CreateProgressDto, SetsAndWeights } from './dto/create-progress.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('progress')
 export class ProgressController {
-  constructor(private readonly progressService: ProgressService) { }
+  constructor(private readonly progressService: ProgressService,
+    private readonly authService: AuthService // Inject AuthService
+  ) { }
 
   @Put()
   async updateProgress(
@@ -16,9 +19,12 @@ export class ProgressController {
   }
   @Post('new')
   async createProgress(
+    @Req() request: Request,
     @Body() CreateProgressDto: CreateProgressDto,
   ): Promise<ExerciseProgress> {
-    return this.progressService.createProgress(CreateProgressDto);
+    const result = await this.authService.getLoggedInUser(request);
+
+    return this.progressService.createProgress(CreateProgressDto, result.user._id);
   }
   @Get(':exerciseId')
   async getLastSet(

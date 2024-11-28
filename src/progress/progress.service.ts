@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { UpdateProgressDto } from './dto/update-progress.dto';
 import { ExerciseProgress, ExerciseProgressDocument } from './schemas/progress.schema';
 import { CreateProgressDto, SetsAndWeights } from './dto/create-progress.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class ProgressService {
@@ -12,9 +13,8 @@ export class ProgressService {
     private readonly exerciseProgressModel: Model<ExerciseProgressDocument>,
   ) { }
 
-  async createProgress(createProgressDto: CreateProgressDto): Promise<ExerciseProgress> {
-    const newProgress = new this.exerciseProgressModel(createProgressDto);
-
+  async createProgress(createProgressDto: CreateProgressDto, ownerId: string): Promise<ExerciseProgress> {
+    const newProgress = new this.exerciseProgressModel({ ...createProgressDto, ownerId });
     return await newProgress.save();
   }
 

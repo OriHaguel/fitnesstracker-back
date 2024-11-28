@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -66,5 +66,36 @@ export class AuthService {
   async logout(response: Response) {
     response.clearCookie('jwt_token');
     return { message: 'Logout successful' };
+  }
+
+  async getLoggedInUser(request: any) {
+
+    try {
+      const token = request.cookies?.jwt_token;  // Changed from request['cookies']?.['jwt_token']
+
+      if (!token) {
+        throw new UnauthorizedException('No token found');
+      }
+
+      // Verify the token
+      const decoded = this.jwtService.verify(token);
+      // // Get user from database using the decoded token
+      const user = await this.userCrudService.getById(decoded.sub);
+
+
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      // Return user without password
+      const { password, ...userWithoutPassword } = user.toObject();
+      return {
+        status: 'success',
+        user: userWithoutPassword
+      };
+
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

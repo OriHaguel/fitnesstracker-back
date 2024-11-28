@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { ObjectId } from 'mongodb'; // To handle ObjectId conversion if needed
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { User } from './schemas/user.schema'; // Make sure User interface or class is imported
@@ -189,8 +189,7 @@ export class UserCrudService {
 
     async getById(userId: string) {
         try {
-            // Find the user by ID and exclude the password field
-            const user = await this.userModel.findById(userId).select('-password').exec();
+            const user = await this.userModel.findById(new Types.ObjectId(userId)).select('-password').exec();
             return user;
         } catch (err) {
             console.log("🚀 ~ getById ~ err:", err);
@@ -198,7 +197,9 @@ export class UserCrudService {
         }
     }
 
-    // Get user by Gmail
+
+
+
     async getByUsername(gmail: string) {
         try {
             const user = await this.userModel.findOne({ gmail }).exec();
