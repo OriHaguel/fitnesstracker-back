@@ -20,9 +20,12 @@ export class ProgressService {
 
 
   async updateProgress(
-    updateProgressDto: UpdateProgressDto
+    updateProgressDto: UpdateProgressDto,
+    userId: string
   ): Promise<ExerciseProgress> {
-    const progress = await this.exerciseProgressModel.findOne({ name: updateProgressDto.name });
+    console.log("🚀 ~ ProgressService ~ userId:", userId)
+    const progress = await this.exerciseProgressModel.findOne({ name: updateProgressDto.name, ownerId: userId });
+    console.log("🚀 ~ ProgressService ~ progress:", progress)
 
     if (!progress) {
       throw new NotFoundException(`Progress entry with name "${updateProgressDto.name}" not found`);
@@ -60,10 +63,10 @@ export class ProgressService {
   //   return lastSet ? lastSet : null;
   // }
 
-  async getLastSetByName(exerciseName: string): Promise<{ name: string; lastSet: SetsAndWeights } | null> {
+  async getLastSetByName(exerciseName: string, userId: string): Promise<{ name: string; lastSet: SetsAndWeights } | null> {
     // Fetch the exercise progress document with name and sets
     const exerciseProgress = await this.exerciseProgressModel
-      .findOne({ name: exerciseName }) // Query by exerciseName
+      .findOne({ name: exerciseName, ownerId: userId }) // Query by exerciseName
       .select('name sets')             // Select both 'name' and 'sets' fields
       .sort({ 'sets._id': 1 });        // Sort sets by their _id field (not needed if you trust order in DB)
 

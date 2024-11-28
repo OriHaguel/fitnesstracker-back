@@ -13,9 +13,11 @@ export class ProgressController {
 
   @Put()
   async updateProgress(
+    @Req() request: Request,
     @Body() updateProgressDto: UpdateProgressDto,
   ): Promise<ExerciseProgress> {
-    return this.progressService.updateProgress(updateProgressDto);
+    const result = await this.authService.getLoggedInUser(request);
+    return this.progressService.updateProgress(updateProgressDto, result.user._id);
   }
   @Post('new')
   async createProgress(
@@ -28,8 +30,10 @@ export class ProgressController {
   }
   @Get(':exerciseId')
   async getLastSet(
+    @Req() request: Request,
     @Param('exerciseId') exerciseId: string,
   ): Promise<{ name: string; lastSet: SetsAndWeights } | null> {
-    return this.progressService.getLastSetByName(exerciseId);
+    const result = await this.authService.getLoggedInUser(request);
+    return this.progressService.getLastSetByName(exerciseId, result.user._id);
   }
 }
