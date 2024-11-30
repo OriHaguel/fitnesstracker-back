@@ -74,7 +74,8 @@ export class AuthService {
       const token = request.cookies?.jwt_token;  // Changed from request['cookies']?.['jwt_token']
 
       if (!token) {
-        throw new UnauthorizedException('No token found');
+        // throw new Error('No token found');
+        return null
       }
 
       // Verify the token
@@ -84,7 +85,9 @@ export class AuthService {
 
 
       if (!user) {
-        throw new UnauthorizedException('User not found');
+        // throw new Error('User not found');
+        return null
+
       }
 
       // Return user without password
@@ -95,7 +98,7 @@ export class AuthService {
       };
 
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new Error('Invalid token');
     }
   }
 }
