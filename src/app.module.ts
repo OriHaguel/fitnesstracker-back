@@ -31,7 +31,7 @@ import { join } from 'path';
       inject: [ConfigService], // Inject ConfigService to use in the factory function
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'), // Path to your public folder
+      rootPath: join(__dirname, '..', 'public'),
     }),
     UsersModule,
     ProgressModule,
