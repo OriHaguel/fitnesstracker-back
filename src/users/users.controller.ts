@@ -6,7 +6,7 @@ import { UpdateExerciseDto } from './dto/update-exercise.dto';
 import { NewWorkoutDto } from './dto/newworkout.dto';
 import { UpdateWorkoutDto } from './dto/updateworkout.dto';
 
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 

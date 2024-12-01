@@ -5,7 +5,7 @@ import { ExerciseProgress } from './schemas/progress.schema';
 import { CreateProgressDto, SetsAndWeights } from './dto/create-progress.dto';
 import { AuthService } from 'src/auth/auth.service';
 
-@Controller('progress')
+@Controller('api/progress')
 export class ProgressController {
   constructor(private readonly progressService: ProgressService,
     private readonly authService: AuthService // Inject AuthService
