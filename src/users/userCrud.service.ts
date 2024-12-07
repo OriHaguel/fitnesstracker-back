@@ -31,6 +31,7 @@ export class UserCrudService {
             throw err;
         }
     }
+
     async updateUser(userId: string, updateData: Partial<CreateUserDto>) {
         try {
             const updatedUser = await this.userModel.findByIdAndUpdate(
@@ -182,11 +183,6 @@ export class UserCrudService {
         return user;
     }
 
-
-
-
-
-
     async getById(userId: string) {
         try {
             const user = await this.userModel.findById(new Types.ObjectId(userId)).select('-password').exec();
@@ -197,6 +193,25 @@ export class UserCrudService {
         }
     }
 
+    async updateWeight(userId: string, weight: number): Promise<User> {
+        const user = await this.userModel.findById(userId);
+
+        if (!user) {
+            throw new NotFoundException(`User with ID ${userId} not found`);
+        }
+
+        if (!weight || weight <= 0) {
+            throw new Error(`Invalid weight value: ${weight}`);
+        }
+
+        user.weight.push({ weight: weight, date: new Date() }); // Ensure `weight` and `date` are always provided
+
+        try {
+            return await user.save();
+        } catch (error) {
+            throw new Error(`Failed to add weight: ${error.message}`);
+        }
+    }
 
 
 

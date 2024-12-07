@@ -53,4 +53,7 @@ export class UsersService {
   addWorkout(userId: string, workoutData: NewWorkoutDto) {
     return this.userCrudService.createWorkout(userId, workoutData)
   }
+  updateWeight(userId: string, newWeight: number) {
+    return this.userCrudService.updateWeight(userId, newWeight)
+  }
 }

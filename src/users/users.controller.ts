@@ -20,11 +20,6 @@ export class UsersController {
     return user
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
@@ -46,6 +41,14 @@ export class UsersController {
     @Body() updateWorkoutDto: UpdateWorkoutDto,
   ) {
     return this.usersService.updateWorkout(userId, workoutId, updateWorkoutDto);
+  }
+  @Put(':userId/weight')
+  weightToUpdate(
+    @Param('userId') userId: string,
+    @Body() body: { weight: number },
+  ) {
+    console.log("🚀 ~ UsersController ~ body:", body)
+    return this.usersService.updateWeight(userId, body.weight);
   }
 
   @Post(':userId/workouts/:workoutId/exercise')
