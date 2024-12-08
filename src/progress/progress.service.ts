@@ -81,4 +81,22 @@ export class ProgressService {
       lastSet: exerciseProgress.sets[exerciseProgress.sets.length - 1],
     };
   }
+  async getAllSetByName(exerciseName: string, userId: string): Promise<{ name: string; allSets: SetsAndWeights[] } | null> {
+    // Fetch the exercise progress document with name and sets
+    const exerciseProgress = await this.exerciseProgressModel
+      .findOne({ name: exerciseName, ownerId: userId }) // Query by exerciseName
+      .select('name sets')             // Select both 'name' and 'sets' fields
+      .sort({ 'sets._id': 1 });        // Sort sets by their _id field (not needed if you trust order in DB)
+
+    // Check if exerciseProgress exists and contains sets
+    if (!exerciseProgress || !exerciseProgress.sets || exerciseProgress.sets.length === 0) {
+      return null;
+    }
+
+    // Return the name and the last set
+    return {
+      name: exerciseProgress.name,
+      allSets: exerciseProgress.sets,
+    };
+  }
 }   

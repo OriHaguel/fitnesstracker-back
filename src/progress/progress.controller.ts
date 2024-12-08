@@ -36,4 +36,12 @@ export class ProgressController {
     const result = await this.authService.getLoggedInUser(request);
     return this.progressService.getLastSetByName(exerciseId, result.user._id);
   }
+  @Get(':exerciseName/all')
+  async getAllSets(
+    @Req() request: Request,
+    @Param('exerciseName') exerciseName: string,
+  ): Promise<{ name: string; allSets: SetsAndWeights[] } | null> {
+    const result = await this.authService.getLoggedInUser(request);
+    return this.progressService.getAllSetByName(exerciseName, result.user._id);
+  }
 }
