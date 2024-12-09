@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsString, ValidateNested, IsNumber } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, ValidateNested, IsNumber, IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateProgressDto {
@@ -22,4 +22,7 @@ export class SetsAndWeights {
 
     @IsNumber()
     reps: number;
+
+    @IsDate()
+    date: Date;
 }

@@ -10,6 +10,9 @@ export class SetsAndWeights {
 
     @Prop({ required: true })
     reps: number;
+
+    @Prop({ required: true })
+    date: Date;
 }
 
 export const SetsAndWeightsSchema = SchemaFactory.createForClass(SetsAndWeights);
