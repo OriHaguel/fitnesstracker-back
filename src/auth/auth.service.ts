@@ -30,7 +30,7 @@ export class AuthService {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      maxAge: 24 * 60 * 60 * 1000 * 365 * 10, // 1 day
     });
 
     return user
@@ -55,7 +55,7 @@ export class AuthService {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      maxAge: 24 * 60 * 60 * 1000 * 365 * 10, // 1 day
     });
 
     // Return user data without sensitive information
