@@ -23,7 +23,7 @@ export class AuthService {
 
   async login(user: any, response: Response) {
     const payload = { gmail: user.gmail, sub: user._id };
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(payload, { expiresIn: '10y' });
 
     // Set HTTP-only cookie
     response.cookie('jwt_token', token, {
@@ -48,7 +48,7 @@ export class AuthService {
 
     // Generate JWT token
     const payload = { gmail: newUser.gmail, sub: newUser._id };
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(payload, { expiresIn: '10y' });
 
     // Set HTTP-only cookie
     response.cookie('jwt_token', token, {
