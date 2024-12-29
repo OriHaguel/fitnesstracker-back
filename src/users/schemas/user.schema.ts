@@ -14,7 +14,7 @@ export interface User extends Document {
         _id?: Types.ObjectId;
         name: string;
         type: string;
-        date?: Date;
+        date?: Date[];
         exercise: {
             sets?: number;
             weight?: number;
@@ -40,7 +40,7 @@ export const UserSchema = new Schema({
             _id: { type: Schema.Types.ObjectId, required: false },
             name: { type: String, required: true },
             type: { type: String, required: true },
-            date: { type: Date, required: false },
+            date: { type: [Date], required: false },
             exercise: [
                 {
                     sets: { type: Number, required: true },

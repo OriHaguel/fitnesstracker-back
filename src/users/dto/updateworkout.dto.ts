@@ -29,9 +29,10 @@ export class UpdateWorkoutDto {
     type?: string;
 
     @IsOptional()
-    @IsDate()
-    @Type(() => Date) // Ensures the string is transformed into a Date object
-    date?: Date;
+    @IsArray() // Validate as an array
+    @Type(() => Date) // Transform each element in the array to a Date
+    // @ValidateNested({ each: true })
+    date?: Date[];
 
     @IsOptional()
     @IsArray()
