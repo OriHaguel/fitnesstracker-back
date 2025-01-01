@@ -162,6 +162,7 @@ export class UserCrudService {
         return updatedUser;
     }
 
+
     async updateWorkout(
         userId: string,
         workoutId: string,
@@ -213,8 +214,6 @@ export class UserCrudService {
         }
     }
 
-
-
     async getByUsername(gmail: string) {
         try {
             const user = await this.userModel.findOne({ gmail }).exec();
@@ -244,6 +243,27 @@ export class UserCrudService {
             console.log("🚀 ~ update ~ err:", err);
             throw err;
         }
+    }
+
+    async removeDateFromWorkout(userId: string, workoutId: string, dateToRemove: Date): Promise<User> {
+        const user = await this.userModel.findOneAndUpdate(
+            {
+                _id: userId,
+                'workouts._id': workoutId,
+            },
+            {
+                $pull: {
+                    'workouts.$.date': dateToRemove,
+                },
+            },
+            { new: true }, // Returns the updated document
+        );
+
+        if (!user) {
+            throw new NotFoundException('User or workout not found');
+        }
+
+        return user;
     }
 }
 

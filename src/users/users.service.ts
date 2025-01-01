@@ -56,4 +56,7 @@ export class UsersService {
   updateWeight(userId: string, newWeight: number) {
     return this.userCrudService.updateWeight(userId, newWeight)
   }
+  deleteDate(userId: string, workoutId: string, dateToRemove: Date) {
+    return this.userCrudService.removeDateFromWorkout(userId, workoutId, dateToRemove)
+  }
 }
